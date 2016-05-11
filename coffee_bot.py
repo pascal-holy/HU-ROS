@@ -34,7 +34,7 @@ import math #for comparing if Kobuki's power has changed using fabs
 
 class turtlebot_coffee():
     ######## CHANGE THE FOLLOWING VALUES #########
-    server_public_dns = 'ec2-52-87-159-60.compute-1.amazonaws.com' #must start with http:// .  Don't include a trailing "/"
+    server_public_dns = 'http://ec2-52-87-159-60.compute-1.amazonaws.com' #must start with http:// .  Don't include a trailing "/"
     near_docking_station_x = -1.88 #x coordinate for pose approx 1 meter from docking station
     near_docking_station_y = 0.06 #y coordinate for pose approx 1 meter from docking station    
     ######## END CHANGE THE FOLLOWING VALUES #########
