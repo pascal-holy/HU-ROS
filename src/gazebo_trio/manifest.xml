@@ -1,0 +1,14 @@
+<package>
+  <description brief="gazebo_trio">
+
+     gazebo_trio
+
+  </description>
+  <author>pascal</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/gazebo_trio</url>
+
+</package>
+
+
