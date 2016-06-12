@@ -7,12 +7,12 @@ class BidLog(object):
     def __init__(self):
         self.distances = dict()
 
-    def note_bid(self, job, bid):
-        if job.id in self.distances:
-            if self.distances[job.id] < bid:
-                self.distances[job.id] = bid
+    def note_bid(self, job_id, bid):
+        if job_id in self.distances:
+            if self.distances[job_id] < bid:
+                self.distances[job_id] = bid
         else:
-            self.distances[job.id] = bid
+            self.distances[job_id] = bid
 
     def delete_bid(self, job_id):
         if job_id in self.distances:
