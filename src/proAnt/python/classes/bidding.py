@@ -14,7 +14,7 @@ class BidLog(object):
         else:
             self.distances[job.id] = bid
 
-    def delete_job(self, job_id):
+    def delete_bid(self, job_id):
         if job_id in self.distances:
             del self.distances[job_id]
         else:
