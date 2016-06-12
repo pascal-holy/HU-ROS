@@ -1,7 +1,8 @@
+#!/usr/bin/env python
 import rospy
-from proAnt.msg import Dst
+from pro_ant.msg import JobOffer, Bid
 from classes.bidding import BidLog, CostCalculator
-from classes.job import Job, Bid
+from classes.job import Job
 import heapq
 
 
@@ -45,7 +46,7 @@ class Robot():
                                         0.0))
         my_bid = cc.calculate(job, self.base, self.charge)
         if my_bid > self.bl.highest_bid(job.id):
-            pub = rospy.Publisher('bid', Dst, queue_size=10)
+            pub = rospy.Publisher('bid', Bid, queue_size=10)
             bid_msg = Bid()
             bid_msg.job_id = job.id
             bid_msg.bidder_id = self.id
