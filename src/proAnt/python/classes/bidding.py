@@ -18,7 +18,7 @@ class BidLog(object):
         if job_id in self.distances:
             del self.distances[job_id]
         else:
-            print("key %s not existing", job_id)
+            print("key %s not existent", job_id)
 
     def print_(self):
         pprint(self.distances)
