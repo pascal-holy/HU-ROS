@@ -23,8 +23,11 @@ class BidLog(object):
     def print_(self):
         pprint(self.distances)
 
-    def highest_bid(self, job):
-        return self.distances[job.id]
+    def highest_bid(self, job_id):
+        if job_id in self.distances:
+            return self.distances[job_id]
+        else:
+            return 0
 
 
 class CostCalculator(object):

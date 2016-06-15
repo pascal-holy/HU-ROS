@@ -8,12 +8,13 @@ import heapq
 
 class Robot():
     def __init__(self):
-        self.autoInit()
+        self.auto_init()
         self.id = rospy.get_param('~robot_id')
         self.base = (rospy.get_param('~base_x'),
                      rospy.get_param('~base_y'),
                      0.0)
         self.charge = 200.0
+        self.leading = 0
         self.rec_messages = list()
         self.heap = []
         self.bl = BidLog()
@@ -24,21 +25,23 @@ class Robot():
 
     def listener(self):
         rospy.Subscriber("bid", Bid, self.gotBid)
-        rospy.Subscriber("job_offer", Job, self.gotJobOffer)
+        rospy.Subscriber("job_offer", JobOffer, self.got_job_offer)
         rospy.spin()
 
     def auto_init(self):
         rospy.set_param('~robot_id', 1)
         rospy.set_param('~base_x', 0.0)
         rospy.set_param('~base_y', 0.0)
+        rospy.set_param('~sleep', 0.0)
 
     def gotBid(self, data):
         if data.bidder_id is not self.id:
             self.rec_messages.append(data.job_id)
             self.bl.note_bid(data.job_id, data.value)
 
-    def gotJobOffer(self, data):
+    def got_job_offer(self, data):
         cc = CostCalculator()
+        print "got job"
         job = Job(data.id, 0.0, (data.source_x,
                                  data.source_y,
                                  0.0), (data.dest_x,
@@ -46,12 +49,18 @@ class Robot():
                                         0.0))
         my_bid = cc.calculate(job, self.base, self.charge)
         if my_bid > self.bl.highest_bid(job.id):
+            self.bl.note_bid(job.id, my_bid)
             pub = rospy.Publisher('bid', Bid, queue_size=10)
             bid_msg = Bid()
             bid_msg.job_id = job.id
             bid_msg.bidder_id = self.id
             bid_msg.value = my_bid
             pub.publish(bid_msg)
+            rospy.loginfo(bid_msg)
+        if my_bid == self.bl.highest_bid(job.id):
+            if self.leading == 5:
+                print "I got the job"
+            self.leading += 1
 
 
 if __name__ == '__main__':
