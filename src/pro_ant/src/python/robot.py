@@ -3,6 +3,7 @@ import rospy
 from pro_ant.msg import JobOffer, Bid
 from classes.bidding import BidLog, CostCalculator
 from classes.job import Job
+from classes.movement import MoveController
 import heapq
 
 
@@ -18,9 +19,10 @@ class Robot():
         self.rec_messages = list()
         self.heap = []
         self.bl = BidLog()
+        # init done
+        self.navigator = MoveController()
         # short sleep
         rospy.sleep(rospy.get_param('~sleep'))
-        # init done
         self.listener()
 
     def listener(self):
@@ -32,7 +34,7 @@ class Robot():
         rospy.set_param('~robot_id', 1)
         rospy.set_param('~base_x', 0.0)
         rospy.set_param('~base_y', 0.0)
-        rospy.set_param('~sleep', 0.0)
+        rospy.set_param('~sleep', 1.0)
 
     def gotBid(self, data):
         if data.bidder_id is not self.id:
@@ -60,6 +62,10 @@ class Robot():
         if my_bid == self.bl.highest_bid(job.id):
             if self.leading == 5:
                 print "I got the job"
+                position = {'x': job.source[0], 'y': job.source[1]}
+                quaternion = {'r1': 0.000, 'r2': 0.000, 'r3': 0.000, 'r4': 1.000}
+                rospy.loginfo("Go to (%s, %s) pose", position['x'], position['y'])
+                success = self.navigator.goto(position, quaternion)
             self.leading += 1
 
 
