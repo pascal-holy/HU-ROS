@@ -19,7 +19,7 @@ class MoveController():
         rospy.loginfo("Wait for the action server to come up")
 
         # Allow up to 5 seconds for the action server to come up
-        self.move_base.wait_for_server()
+        # self.move_base.wait_for_server()
         rospy.loginfo("action server up")
 
     def goto(self, pos, quat):

@@ -7,10 +7,10 @@ from pro_ant.msg import JobOffer
 def createMessage(new_id):
     msg = JobOffer()
     msg.id = new_id
-    msg.source_x = random.uniform(0.0, 5.0)
-    msg.source_y = random.uniform(0.0, 5.0)
-    msg.dest_x = random.uniform(0.0, 5.0)
-    msg.dest_y = random.uniform(0.0, 5.0)
+    msg.source_x = random.uniform(0.0, 5.0) - 2.5
+    msg.source_y = random.uniform(0.0, 5.0) - 2.5
+    msg.dest_x = random.uniform(0.0, 5.0) - 2.5
+    msg.dest_y = random.uniform(0.0, 5.0) - 2.5
     return msg
 
 
@@ -20,15 +20,18 @@ def start_auction():
     rospy.init_node("auctioneer", anonymous=True)
     pub = rospy.Publisher('job_offer', JobOffer, queue_size=10)
     r = rospy.Rate(0.5)  # 1hz
-    msg = createMessage(1)
-    msg2 = createMessage(2)
+    msg = createMessage(msg_count)
 
     while not rospy.is_shutdown():
-        pub.publish(msg)
-        rospy.loginfo(msg)
-        r.sleep()
-        # pub.publish(msg2)
-        # r.sleep()
+        if wait_count < 10:
+            wait_count += 1
+            pub.publish(msg)
+            rospy.loginfo(msg)
+            r.sleep()
+        else:
+            wait_count = 0
+            msg_count += 1
+            msg = createMessage(msg_count)
 
 
 if __name__ == '__main__':

@@ -59,12 +59,13 @@ class Robot():
             bid_msg.value = my_bid
             pub.publish(bid_msg)
             rospy.loginfo(bid_msg)
-        if my_bid == self.bl.highest_bid(job.id):
+        if my_bid == self.bl.highest_bid(job.id) and heapq:
             if self.leading == 5:
                 print "I got the job"
                 position = {'x': job.source[0], 'y': job.source[1]}
                 quaternion = {'r1': 0.000, 'r2': 0.000, 'r3': 0.000, 'r4': 1.000}
                 rospy.loginfo("Go to (%s, %s) pose", position['x'], position['y'])
+                heapq.heappush(self.heap, position)
                 success = self.navigator.goto(position, quaternion)
             self.leading += 1
 

@@ -1,0 +1,18 @@
+<launch>
+  <include file="$(find turtlebot_gazebo)/launch/amcl_demo.launch"/>
+  <include file="$(find turtlebot_gazebo)/launch/turtlebot_world.launch"/>
+  <node
+  	pkg="pro_ant"
+  		type="auctioneer.py"
+  		name="auctioneer1"
+  />
+  <node
+  	pkg="pro_ant"
+  	type="robot.py"
+  	name="robot1">
+  		<param name="robot_id" value="1" />
+ 		<param name="sleep" value="3" type="int"/>
+ 		<param name="base_x" value="2.0" />
+ 		<param name="base_y" value="2.0" />
+ 	</node>
+ </launch>
