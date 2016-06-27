@@ -34,8 +34,19 @@ class CostCalculator(object):
     def __init__(self):
         cost = 0.0
 
-    def calculate(self, job, base, charge):
-        goal = job.source
-        base_array = numpy.array(base)
-        dist = numpy.linalg.norm(base_array - goal)
+    def calculate(self, job, base, charge, job_queue, distances, speed):
+        sum_distance = 0
+        first = True
+        last_job = None
+        for job in list:
+            sum_distance += distances[job.source][job.destination]
+            if not first:
+                sum_distance += distances[last_job.destination][job.source]
+                first = False
+            last_job = job
+        dist = sum_distance * speed
+        if job_queue == list():
+            goal = job.source
+            base_array = numpy.array(base)
+            dist = numpy.linalg.norm(base_array - goal)
         return charge - dist

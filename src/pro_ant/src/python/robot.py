@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from pro_ant.msg import JobOffer, Bid
+from pro_ant.msg import JobOffer, Bid, Shotgun
 from classes.bidding import BidLog, CostCalculator
 from classes.job import Job
 from classes.movement import MoveController
@@ -15,10 +15,16 @@ class Robot():
                      rospy.get_param('~base_y'),
                      0.0)
         self.charge = 200.0
+        self.avg_speed = 1
+        self.max_load = 1000
+        self.job_started = '00'
         self.leading = 0
         self.rec_messages = list()
+        self.jobs = list()
         self.heap = []
         self.bl = BidLog()
+        self.distances = [[0 for x in range(8)] for y in range(8)]
+        self.distances = 
         # init done
         self.navigator = MoveController()
         # short sleep
@@ -62,6 +68,11 @@ class Robot():
         if my_bid == self.bl.highest_bid(job.id) and heapq:
             if self.leading == 5:
                 print "I got the job"
+                seller = rospy.Publisher('Shotgun', Shotgun, queue_size=10)
+                shotgun = Shotgun()
+                shotgun.bidder_id = self.id
+                shotgun.job_id = job.id
+                seller.publish(shotgun)
                 position = {'x': job.source[0], 'y': job.source[1]}
                 quaternion = {'r1': 0.000, 'r2': 0.000, 'r3': 0.000, 'r4': 1.000}
                 rospy.loginfo("Go to (%s, %s) pose", position['x'], position['y'])

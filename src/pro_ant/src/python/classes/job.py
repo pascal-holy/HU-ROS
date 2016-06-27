@@ -4,12 +4,13 @@
 
 class Job(object):
 
-    def __init__(self, id, cost, source, destination):
+    def __init__(self, id, cost, source, destination, type):
         self.id = id
         self.cost = cost
         self.source = source
         self.destination = destination
         self.payload = ""
+        self.type = type
 
     def printJob(self):
         print "id: %s" % self.id
