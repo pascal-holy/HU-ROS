@@ -1,0 +1,117 @@
+Agent {
+  Hashmap DistanceCache;
+  Queue myTasks; //FIFO Queue
+  int weightCapacity;
+  String myid = MAC_ADDRESS;
+  int currentAuction = 0;
+
+  int minBid = -1; // -1 = infinite
+  int winner;
+  int finalWinner;
+  Task auctionTask;
+
+  int numberBots;
+  int count = 0;
+
+
+  onTransportTaskReceived(Task task) {
+
+	additionalDistance = 0;
+	bool chargeTaskinQueue = false;
+	for each Task t in myTasks {
+		if(t == ChargingTask) {
+			//TODO Besprechen mit Team
+			additionalDistance += CHARGING_PENALTY;
+			chargeTaskinQueue = true;
+		}
+		additionalDistance += t.distanceStartGoal;
+	}
+  additionalDistance -= calcDistance(getPosition(), myTasks.firstTask.start);
+	int energyConsumption = additionalDistance * (energy/distance);
+	if(Energy-energyConsumption < 45% && chargeTaskinQueue == false) {
+		myTasks.push(ChargingTask);
+	}
+
+	if(Robot at Docking Station && Energy < 55%) {
+		return;
+	}
+  auctionTask = task;
+  currentAuction = task.id;
+  if(task.weight > weightCapacity) {
+    Offer myOffer = new Offer(task.id, myid ,-1);
+  }
+  else {
+   if(!empty(myTasks)) {
+      curPosition = myTasks.lastTask.goal;
+    }
+    else {
+      curPosition = getPosition();
+    }
+    distanceStart = calcDistance(curPosition, task.start);
+    distanceStartGoal = DistanceCache.find(task.start, task.goal);
+    //Noch nicht in Cache
+    if(distanceStartGoal == NULL) {
+      distanceStartGoal = calcDistance(task.start, task.goal);
+      DistanceCache.save(task.start, task.goal, distanceStartGoal);
+    }
+    //TODO Genug Energie?
+    offer = distanceStart + additionalDistance;
+    weightFactor = weightCapacity / task.weight;
+    offer *= weightFactor;
+    Bid myBid = new Bid(task.id, myid ,offer);
+    }
+    send(myBid);
+  }
+
+  onBidReceived(Bid bid) {
+    count++;
+    if(!(bid.taskid == currentAuction)) {
+      return;
+    }
+    if(bid.offer > 0 && (bid.offer < minBid || minBid == -1)) {
+      minBid = bid.offer;
+      winner = bid.robotid;
+    }
+    if(bid.offer == minBid && minBid != -1 && winner > bid.robotid) {
+      winner = bid.robotid;
+    }
+    if(winner == myid && (count >= numberBots || UnixTimeinMillis() -  auctionTask.Timestamp > 3000 )) {
+      Sold msg = new Sold(myid, currentAuction);
+      send(msg);
+    }
+  }
+
+	onTaskCompleted() {
+		tmp = myTasks.pop()
+		if(tmp == ChargingTask) {
+			Charging msg = new Charging(dockingStation, 1);
+			send(msg);
+		}
+	}
+
+	chargingTask() {
+		Look up free Docking stations
+		Charging msg = new Charging(dockingStation, 0);
+		send(msg);
+		go to nearest free Docking station
+	}
+
+//Korrektheitseigenschaften:
+*EIN Roboter nimmt Auftrag
+*Auftrag wird in jedem Fall vergeben
+
+  onSoldReceived(Sold sold) {
+    if(sold.robotid > finalWinner) {
+      finalWinner = sold.robotid;
+    }
+    if(UnixTimeinMillis() - auctionTask.Timestamp > 4000) {
+      if(finalWinner = myid) {
+        myTasks.enqueue(auctionTask);
+      }
+    }
+  }
+
+  main() {
+
+  }
+}

@@ -1,0 +1,4 @@
+Charging {
+	Position dockingStation;
+	int start;// = 1, wenn finished, 0 sonst.
+}

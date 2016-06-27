@@ -1,0 +1,4 @@
+Sold {
+  String robotid;
+  int taskid;
+}

@@ -1,0 +1,7 @@
+TransportTask {
+  int id;
+  Position start;
+  Position goal;
+  int weight; //1 if not known
+	Timestamp;
+}
