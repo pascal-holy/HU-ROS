@@ -7,10 +7,10 @@ from pro_ant.msg import JobOffer
 def createMessage(new_id):
     msg = JobOffer()
     msg.id = new_id
-    msg.source_x = random.uniform(0.0, 5.0) - 2.5
-    msg.source_y = random.uniform(0.0, 5.0) - 2.5
-    msg.dest_x = random.uniform(0.0, 5.0) - 2.5
-    msg.dest_y = random.uniform(0.0, 5.0) - 2.5
+    msg.source_id = random.randint(0, 2)
+    msg.destination_id = random.randint(0, 2)
+    while msg.source_id == msg.destination_id:
+        msg.destination_id = random.randint(0, 2)
     return msg
 
 

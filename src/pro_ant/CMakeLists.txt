@@ -49,6 +49,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    Bid.msg
    JobOffer.msg
+   Shotgun.msg
  )
 
 ## Generate services in the 'srv' folder

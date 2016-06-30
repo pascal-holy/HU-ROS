@@ -4,11 +4,14 @@
 
 class Job(object):
 
-    def __init__(self, id, cost, source, destination, type):
+    def __init__(self, id, cost, source, source_id,
+                 destination, destination_id, type):
         self.id = id
         self.cost = cost
         self.source = source
+        self.source_id = source_id
         self.destination = destination
+        self.destination_id = destination_id
         self.payload = ""
         self.type = type
 

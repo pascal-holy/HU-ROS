@@ -1,5 +1,3 @@
 int16 id
-float64 source_x
-float64 source_y
-float64 dest_x
-float64 dest_y
+int16 source_id
+int16 destination_id
