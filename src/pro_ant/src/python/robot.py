@@ -10,7 +10,10 @@ import heapq
 
 class Robot():
     def __init__(self):
-        self.auto_init()
+        if rospy.has_param('~robot_id'):
+            print "autoinit"
+        else:
+            self.auto_init()
         self.id = rospy.get_param('~robot_id')
         self.base = (rospy.get_param('~base_x'),
                      rospy.get_param('~base_y'),
@@ -22,17 +25,16 @@ class Robot():
         self.leading = 0
         # self.rec_messages = list()
         self.jobs = list()
-        self.heap = []
         self.bl = BidLog()
         self.stations = list()
         self.stations.append((1.0, 2.0, 0))
         self.stations.append((-0.5, 0.0, 0))
         self.stations.append((2.0, -0.5, 0))
         self.distances = np.matrix([[0, 2, 3], [2, 0, 3], [3, 2, 0]])
-        # init done
         self.navigator = MoveController()
         # short sleep
         rospy.sleep(rospy.get_param('~sleep'))
+        # init done
         self.listener()
 
     def listener(self):
@@ -53,13 +55,12 @@ class Robot():
 
     def got_job_offer(self, data):
         cc = CostCalculator()
-        print "got job"
         job = Job(data.id, 0.0,
                   self.stations[data.source_id], data.source_id,
                   self.stations[data.destination_id], data.destination_id, 1)
         my_bid = cc.calculate(job, self.base, self.charge, self.jobs,
                               self.distances, self.avg_speed)
-        if my_bid > self.bl.highest_bid(job.id):
+        if my_bid < self.bl.best_bid(job.id):
             self.bl.note_bid(job.id, my_bid)
             pub = rospy.Publisher('bid', Bid, queue_size=10)
             bid_msg = Bid()
@@ -68,7 +69,7 @@ class Robot():
             bid_msg.value = my_bid
             pub.publish(bid_msg)
             rospy.loginfo(bid_msg)
-        if my_bid == self.bl.highest_bid(job.id):
+        if my_bid == self.bl.best_bid(job.id):
             if self.leading == 5:
                 self.leading = 0  # theoretisch pro Auftrag
                 print "I got the job"

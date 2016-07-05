@@ -9,7 +9,7 @@ class BidLog(object):
 
     def note_bid(self, job_id, bid):
         if job_id in self.distances:
-            if self.distances[job_id] < bid:
+            if self.distances[job_id] > bid:
                 self.distances[job_id] = bid
         else:
             self.distances[job_id] = bid
@@ -23,11 +23,11 @@ class BidLog(object):
     def print_(self):
         pprint(self.distances)
 
-    def highest_bid(self, job_id):
+    def best_bid(self, job_id):
         if job_id in self.distances:
             return self.distances[job_id]
         else:
-            return 0
+            return 10000
 
 
 class CostCalculator(object):

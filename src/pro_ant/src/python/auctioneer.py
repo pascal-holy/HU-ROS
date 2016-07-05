@@ -4,7 +4,7 @@ import random
 from pro_ant.msg import JobOffer
 
 
-def createMessage(new_id):
+def create_message(new_id):
     msg = JobOffer()
     msg.id = new_id
     msg.source_id = random.randint(0, 2)
@@ -14,13 +14,13 @@ def createMessage(new_id):
     return msg
 
 
-def start_auction():
+def start_auction(self):
     msg_count = 0
     wait_count = 0
-    rospy.init_node("auctioneer", anonymous=True)
+    rospy.init_node('auctioneer', anonymous=True)
     pub = rospy.Publisher('job_offer', JobOffer, queue_size=10)
     r = rospy.Rate(0.5)  # 1hz
-    msg = createMessage(msg_count)
+    msg = create_message(msg_count)
 
     while not rospy.is_shutdown():
         if wait_count < 10:
@@ -31,7 +31,7 @@ def start_auction():
         else:
             wait_count = 0
             msg_count += 1
-            msg = createMessage(msg_count)
+            msg = create_message(msg_count)
 
 
 if __name__ == '__main__':

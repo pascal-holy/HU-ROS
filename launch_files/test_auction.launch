@@ -1,0 +1,25 @@
+<launch>
+  <node
+  	pkg="pro_ant"
+  		type="auctioneer.py"
+  		name="auctioneer1"
+  />
+  <node
+  	pkg="pro_ant"
+  	type="robot.py"
+  	name="robot1">
+  		<param name="robot_id" value="1" />
+ 		<param name="sleep" value="3" type="int"/>
+ 		<param name="base_x" value="2.0" />
+ 		<param name="base_y" value="2.0" />
+ 	</node>
+  <node
+    pkg="pro_ant"
+    type="robot.py"
+    name="robot2">
+      <param name="robot_id" value="2" />
+    <param name="sleep" value="2" type="int"/>
+    <param name="base_x" value="-1.0" />
+    <param name="base_y" value="-1.0" />
+  </node>
+ </launch>
