@@ -6,11 +6,6 @@ from classes.job import Job
 from classes.movement import MoveController
 import numpy as np
 import heapq
-from nav_msgs.srv import GetPlan
-from geometry_msgs.msg import PoseStamped, Point, Pose, Twist, Quaternion
-from std_msgs.msg import Header
-import pprint
-import math
 
 
 class Robot():
@@ -19,61 +14,29 @@ class Robot():
             print "autoinit"
         else:
             self.auto_init()
-        self.id = rospy.get_param('~robot_id')
-        self.base = (rospy.get_param('~base_x'),
-                     rospy.get_param('~base_y'),
-                     0.0)
-        self.charge = 200.0
-        self.avg_speed = 1.0
-        self.max_load = 1000
-        self.job_started = '00'
-        self.leading = 0
-        # self.rec_messages = list()
-        self.jobs = list()
-        self.bl = BidLog()
-        self.stations = list()
-        self.stations.append((1.0, 2.0, 0))
-        self.stations.append((-0.5, 0.0, 0))
-        self.stations.append((2.0, -0.5, 0))
-        self.distances = np.matrix([[0, 2, 3], [2, 0, 3], [3, 2, 0]])
-        self.navigator = MoveController()
-        # short sleep
-        rospy.sleep(rospy.get_param('~sleep'))
-        # init done
-	p1 = Point(float(0), float(0), float(0))
-	p2 = Point(float(1), float(1), float())
-	self.calcDistance(p1, p2)
-
-        self.listener()
-
-    def calcDistance(self, p1, p2):
-	NAME = "/move_base/make_plan"
-	rospy.wait_for_service(NAME)
-	planpath = rospy.ServiceProxy(NAME, GetPlan)
-	posestampeds = PoseStamped()
-	posestampeds.header = Header()
-	posestampeds.header.frame_id = 'map'
-	posestampeds.header.stamp = rospy.Time.now()
-	#Orientation not important for distance calculation
-	quaternion = Quaternion(float(0), float(0), float(0.892), float(-1.5))
-	posestampeds.pose = Pose(p1, quaternion)
-	posestampede = PoseStamped()
-	posestampede.header = Header()
-	posestampede.header.frame_id = 'map'
-	posestampede.header.stamp = rospy.Time.now()
-	posestampede.pose = Pose(p2, quaternion)
-
-	try:
-		plan = planpath(posestampeds, posestampede, float(1)).plan
-		distance = 0
-		for e1 in plan.poses:
-			for e2 in plan.poses[1:]:
-				startpoint = e1.pose.position
-				endpoint = e2.pose.position
-				distance += math.sqrt( (startpoint.x-endpoint.x)**2 + (startpoint.y-endpoint.y)**2)
-		pprint.pprint(distance)
-	except rospy.ServiceException as exc:
-		print("Service did not process request: " + str(exc))
+    self.id = rospy.get_param('~robot_id')
+    self.base = (rospy.get_param('~base_x'),
+                 rospy.get_param('~base_y'),
+                 0.0)
+    self.charge = 200.0
+    self.avg_speed = 1.0
+    self.max_load = 1000
+    self.job_started = '00'
+    self.leading = 0
+    # self.rec_messages = list()
+    self.jobs = list()
+    self.bl = BidLog()
+    self.stations = list()
+    self.stations.append((1.0, 2.0, 0))
+    self.stations.append((-0.5, 0.0, 0))
+    self.stations.append((2.0, -0.5, 0))
+    self.distances = np.matrix([[0, 2, 3], [2, 0, 3], [3, 2, 0]])
+    self.navigator = MoveController()
+    # short sleep
+    rospy.sleep(rospy.get_param('~sleep'))
+    # init done
+    #navigator.calc_distance(p1, p2)
+    self.listener()
 
 
     def listener(self):

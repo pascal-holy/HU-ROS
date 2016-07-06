@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from classes.bidding import BidLog, CostCalculator
+from classes.movement import MoveController
 from classes.job import Job
+from geometry_msgs.msg import Point
 import heapq
 import numpy as np
 
@@ -41,3 +43,9 @@ heap = []
 heapq.heappush(heap, 2)
 heapq.heappush(heap, 4)
 # print heapq.heappushpop(heap, 3)
+
+
+p1 = Point(float(0), float(0), float(0))
+p2 = Point(float(1), float(1), float(3))
+navigator = MoveController()
+print 'distance %f' % navigator.calc_distance(p1, p2)

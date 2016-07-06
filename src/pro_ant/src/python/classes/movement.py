@@ -3,7 +3,10 @@ import rospy
 import actionlib
 from actionlib_msgs.msg import *
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from geometry_msgs.msg import Pose, Point, Quaternion
+from geometry_msgs.msg import PoseStamped, Pose, Point, Twist, Quaternion
+from nav_msgs.srv import GetPlan
+from std_msgs.msg import Header
+import math
 
 
 class MoveController():
@@ -52,6 +55,38 @@ class MoveController():
 
         self.goal_sent = False
         return result
+
+    def calc_distance(self, p1, p2):
+        service_name = "/move_base/make_plan"
+        rospy.wait_for_service(service_name)
+        planpath = rospy.ServiceProxy(service_name, GetPlan)
+        posestampeds = PoseStamped()
+        posestampeds.header = Header()
+        posestampeds.header.frame_id = 'map'
+        posestampeds.header.stamp = rospy.Time.now()
+        # Orientation not important for distance calculation
+        quaternion = Quaternion(float(0), float(0), float(0), float(0))
+        posestampeds.pose = Pose(p1, quaternion)
+        posestampede = PoseStamped()
+        posestampede.header = Header()
+        posestampede.header.frame_id = 'map'
+        posestampede.header.stamp = rospy.Time.now()
+        posestampede.pose = Pose(p2, quaternion)
+
+        try:
+            plan = planpath(posestampeds, posestampede, float(1)).plan
+            distance = 0
+            for e1 in plan.poses:
+                for e2 in plan.poses[1:]:
+                    startpoint = e1.pose.position
+                    endpoint = e2.pose.position
+                    distance += math.sqrt((startpoint.x - endpoint.x)**2 
+                                + (startpoint.y - endpoint.y)**2)
+            pprint.pprint(distance)
+            return distance
+        except rospy.ServiceException as exc:
+            print("Service did not process request: " + str(exc))
+            return 10000
 
     def shutdown(self):
         if self.goal_sent:
