@@ -55,7 +55,7 @@ class Robot():
 	posestampeds.header.frame_id = 'map'
 	posestampeds.header.stamp = rospy.Time.now()
 	#Orientation not important for distance calculation
-	quaternion = Quaternion(float(0), float(0), float(0.892), float(-1.5))
+	quaternion = Quaternion(float(0), float(0), float(0), float(0))
 	posestampeds.pose = Pose(p1, quaternion)
 	posestampede = PoseStamped()
 	posestampede.header = Header()
