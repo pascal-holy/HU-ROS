@@ -14,30 +14,29 @@ class Robot():
             print "autoinit"
         else:
             self.auto_init()
-    self.id = rospy.get_param('~robot_id')
-    self.base = (rospy.get_param('~base_x'),
-                 rospy.get_param('~base_y'),
-                 0.0)
-    self.charge = 200.0
-    self.avg_speed = 1.0
-    self.max_load = 1000
-    self.job_started = '00'
-    self.leading = 0
-    # self.rec_messages = list()
-    self.jobs = list()
-    self.bl = BidLog()
-    self.stations = list()
-    self.stations.append((1.0, 2.0, 0))
-    self.stations.append((-0.5, 0.0, 0))
-    self.stations.append((2.0, -0.5, 0))
-    self.distances = np.matrix([[0, 2, 3], [2, 0, 3], [3, 2, 0]])
-    self.navigator = MoveController()
-    # short sleep
-    rospy.sleep(rospy.get_param('~sleep'))
-    # init done
-    #navigator.calc_distance(p1, p2)
-    self.listener()
-
+        self.id = rospy.get_param('~robot_id')
+        self.base = (rospy.get_param('~base_x'),
+                     rospy.get_param('~base_y'),
+                     0.0)
+        self.charge = 200.0
+        self.avg_speed = 1.0
+        self.max_load = 1000
+        self.job_started = '00'
+        self.leading = 0
+        # self.rec_messages = list()
+        self.jobs = list()
+        self.bl = BidLog()
+        self.stations = list()
+        self.stations.append((1.0, 2.0, 0))
+        self.stations.append((-0.5, 0.0, 0))
+        self.stations.append((2.0, -0.5, 0))
+        self.distances = np.matrix([[0, 2, 3], [2, 0, 3], [3, 2, 0]])
+        self.navigator = MoveController()
+        # short sleep
+        rospy.sleep(rospy.get_param('~sleep'))
+        # init done
+        # navigator.calc_distance(p1, p2)
+        self.listener()
 
     def listener(self):
         rospy.Subscriber("bid", Bid, self.gotBid)

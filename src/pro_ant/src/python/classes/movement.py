@@ -3,7 +3,7 @@ import rospy
 import actionlib
 from actionlib_msgs.msg import *
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from geometry_msgs.msg import PoseStamped, Pose, Point, Twist, Quaternion
+from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 from nav_msgs.srv import GetPlan
 from std_msgs.msg import Header
 import math
@@ -75,7 +75,7 @@ class MoveController():
 
         try:
             plan = planpath(posestampeds, posestampede, float(1)).plan
-            distance = 0
+            distance = 0.0
             for e1 in plan.poses:
                 for e2 in plan.poses[1:]:
                     startpoint = e1.pose.position
