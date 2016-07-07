@@ -35,6 +35,7 @@ class Robot():
         # short sleep
         rospy.sleep(rospy.get_param('~sleep'))
         # init done
+        # self.navigator.calc_distance(p1, p2)
         self.listener()
 
     def listener(self):

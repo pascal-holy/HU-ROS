@@ -14,7 +14,7 @@ def create_message(new_id):
     return msg
 
 
-def start_auction(self):
+def start_auction():
     msg_count = 0
     wait_count = 0
     rospy.init_node('auctioneer', anonymous=True)
