@@ -6,13 +6,14 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 from nav_msgs.srv import GetPlan
 from std_msgs.msg import Header
+from pprint import pprint
 import math
 
 
 class MoveController():
     def __init__(self):
         self.goal_sent = False
-
+        rospy.init_node("MC", anonymous=True)
         # What to do if shut down (e.g. Ctrl-C or failure)
         rospy.on_shutdown(self.shutdown)
 
@@ -74,19 +75,17 @@ class MoveController():
         posestampede.pose = Pose(p2, quaternion)
 
         try:
-            plan = planpath(posestampeds, posestampede, float(1)).plan
+            poses = planpath(posestampeds, posestampede, 0.1).plan.poses
             distance = 0.0
-            for e1 in plan.poses:
-                for e2 in plan.poses[1:]:
-                    startpoint = e1.pose.position
-                    endpoint = e2.pose.position
-                    distance += math.sqrt((startpoint.x - endpoint.x)**2 
-                                + (startpoint.y - endpoint.y)**2)
-            pprint.pprint(distance)
+            for i in range(0, len(poses)-1):
+                startpoint = poses[i].pose.position
+                endpoint = poses[i+1].pose.position
+                distance += math.sqrt((startpoint.x - endpoint.x)**2 
+                            + (startpoint.y - endpoint.y)**2)
             return distance
         except rospy.ServiceException as exc:
             print("Service did not process request: " + str(exc))
-            return 10000
+            return None
 
     def shutdown(self):
         if self.goal_sent:

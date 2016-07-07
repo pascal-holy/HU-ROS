@@ -5,6 +5,7 @@ from classes.job import Job
 from geometry_msgs.msg import Point
 import heapq
 import numpy as np
+import time
 
 
 bl = BidLog()
@@ -44,8 +45,15 @@ heapq.heappush(heap, 2)
 heapq.heappush(heap, 4)
 # print heapq.heappushpop(heap, 3)
 
-
-p1 = Point(float(0), float(0), float(0))
-p2 = Point(float(1), float(1), float(3))
 navigator = MoveController()
+
+p1 = Point(float(-3), float(1), 0.0)
+p2 = Point(float(-3), float(-2), 0.0)
 print 'distance %f' % navigator.calc_distance(p1, p2)
+p1 = Point(float(1), float(1), 0.0)
+p2 = Point(float(0), float(0), 0.0)
+start = time.time()
+print 'distance %f' % navigator.calc_distance(p1, p2)
+end = time.time()
+delta = end - start
+print delta
