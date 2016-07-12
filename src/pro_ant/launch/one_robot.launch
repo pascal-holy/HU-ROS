@@ -5,6 +5,7 @@
     <!--<node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="$(arg init_pose) -urdf -param /robot_description -model $(arg robot_name)" respawn="false" output="screen"/>-->
     <node name="spawn_turtlebot_model" pkg="gazebo_ros" type="spawn_model"
         args="$(arg init_pose) -unpause -urdf -param /robot_description -model $(arg robot_name)">
+         <remap from="tf" to="gazebo_$(arg robot_name)_tf"/>
     </node>
 <!--
   <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
@@ -14,6 +15,7 @@
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
     <param name="publish_frequency" type="double" value="30.0" />
     </node>
+
     <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
     <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
         args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
@@ -33,7 +35,7 @@
 
 
   <!-- The odometry estimator -->
-
+<!--
   <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
     <param name="freq" value="30.0"/>
     <param name="sensor_timeout" value="1.0"/>
@@ -42,28 +44,39 @@
     <param name="odom_used" value="true"/>
     <param name="imu_used" value="false"/>
     <param name="vo_used" value="false"/>
-    <param name="output_frame" value="odom_combined"/>
-  </node>
+    <param name="output_frame" value="odom"/>
+  </node>-->
+  <!--
+  <node  pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" >
+    <param name="freq" value="30.0"/>
+    <param name="sensor_timeout" value="1.0"/>
+    <param name="publish_tf" value="true"/>
+    <param name="odom_used" value="true"/>
+    <param name="imu_used" value="false"/>
+    <param name="vo_used" value="false"/>
+    <param name="output_frame" value="odom"/>
+    <param name="output_frame" value="odom" />
+  </node>-->
+
 
 
   <!-- throttling -->
-  <!--
+  
   <node pkg="nodelet" type="nodelet" name="kinect_laser" args="load pointcloud_to_laserscan/CloudToScan openni_manager" respawn="true">
     <param name="output_frame_id" value="camera_depth_frame"/>
     <param name="min_height" value="-0.15"/>
     <param name="max_height" value="0.15"/>
     <remap from="cloud" to="cloud_throttled"/>
-  </node>-->
+  </node>
 
   <!-- Fake Laser (narrow one, for localization -->
-  <!--<node pkg="nodelet" type="nodelet" name="kinect_laser_narrow" args="load pointcloud_to_laserscan/CloudToScan openni_manager" respawn="true">
+  <node pkg="nodelet" type="nodelet" name="kinect_laser_narrow" args="load pointcloud_to_laserscan/CloudToScan openni_manager" respawn="true">
     <param name="output_frame_id" value="camera_depth_frame"/>
-     heights are in the (optical?) frame of the kinect 
     <param name="min_height" value="-0.025"/>
     <param name="max_height" value="0.025"/>
     <remap from="cloud" to="cloud_throttled"/>
     <remap from="scan" to="narrow_scan"/>
-  </node>-->
+  </node>
 <node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
   <node pkg="nodelet" type="nodelet" name="depthimage_to_laserscan"
         args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet laserscan_nodelet_manager">
