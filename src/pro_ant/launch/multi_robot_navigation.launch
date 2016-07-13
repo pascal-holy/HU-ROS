@@ -2,7 +2,7 @@
   <param name="/use_sim_time" value="true"/>
   <arg name="map_file" default="$(env TURTLEBOT_GAZEBO_MAP_FILE)"/>
   <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" >
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find pro_ant)/map.yaml" >
     <param name="frame_id" value="/map"/>
   </node>
 
@@ -10,14 +10,18 @@
     <param name="tf_prefix" value="robot1_tf" />
     <param name="amcl/initial_pose_x" value="2.5" />
     <param name="amcl/initial_pose_y" value="0" />
-    <include file="$(find pro_ant)/launch/move_base.launch" />
+    <include file="$(find pro_ant)/launch/move_base.launch">
+      <arg name="robot_name" value="robot1"/>
+    </include>
   </group>
 
   <group ns="robot2">
     <param name="tf_prefix" value="robot2_tf" />
     <param name="amcl/initial_pose_x" value="-1.5" />
     <param name="amcl/initial_pose_y" value="0" />
-    <include file="$(find pro_ant)/launch/move_base.launch" />
+    <include file="$(find pro_ant)/launch/move_base.launch">
+      <arg name="robot_name" value="robot2"/>
+    </include>
   </group>
 
   <!--<node pkg="rviz" type="rviz" name="rviz" args="-d $(find pro_ant)/config/multi.vcg"
