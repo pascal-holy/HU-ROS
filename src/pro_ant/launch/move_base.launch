@@ -6,9 +6,9 @@
   </include>-->
   <arg name="robot_name"/>
   <include file="$(find pro_ant)/launch/amcl_diff_with_map_hwk.launch" />
-   <node pkg="tf" type="static_transform_publisher" name="map_to_odom_combined" args="100 100 0 0 0 0 /map $(arg robot_name)/odom_combined 100"/>
+   <node pkg="tf" type="static_transform_publisher" name="map_to_odom_combined" args="100 100 0 0 0 0 /map $(arg robot_name)_tf/odom 100"/>
 
-  <!-- Define your move_base node -->
+  <!-- Define your move_base node 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find pro_ant)/costmap_common_params.yaml" command="load" ns="global_costmap"/>
     <rosparam file="$(find pro_ant)/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -16,5 +16,5 @@
     <rosparam file="$(find pro_ant)/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find pro_ant)/base_local_planner_params.yaml" command="load" />
     <remap from="map" to="/map" />
-  </node>
+  </node>-->
 </launch>

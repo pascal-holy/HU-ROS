@@ -5,6 +5,7 @@
     <!--<node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="$(arg init_pose) -urdf -param /robot_description -model $(arg robot_name)" respawn="false" output="screen"/>-->
     <node name="spawn_turtlebot_model" pkg="gazebo_ros" type="spawn_model"
         args="$(arg init_pose) -unpause -urdf -param /robot_description -model $(arg robot_name)">
+        <remap from="$(arg robot_name)_tf/odom" to="gaz_odom"/>
     </node>
     <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
   <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
@@ -42,7 +43,7 @@
     <param name="odom_used" value="true"/>
     <param name="imu_used" value="false"/>
     <param name="vo_used" value="false"/>
-    <param name="output_frame" value="odom"/>
+    <param name="output_frame" value="odom_combined"/>
   </node>-->
 
 <node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
