@@ -31,19 +31,36 @@ class BidLog(object):
 
 
 class CostCalculator(object):
-    def __init__(self):
+    def __init__(self, navigator):
         cost = 0.0
+        self.navigator = navigator
 
     def calculate(self, new_job, base, charge, job_queue, distances, speed):
         sum_distance = 0
         first = True
         last_job = None
         for job in job_queue:
-            sum_distance += distances[job.source_id, job.destination_id]
+            try:
+                sum_distance += distances[(job.source, job.destination)]
+            except KeyError:
+                dist_start_end = navigator.calc_distance(job.source, job.destination)
+                distances.add((job.source, job.destination), dist_start_end)
+                sum_distance += dist_start_end
             if not first:
-                sum_distance += distances[last_job.destination, job.source]
+                try:
+                    sum_distance += distances[(last_job.destination, job.source)]
+                except KeyError:
+                    dist_lastend_start = navigator.calc_distance(last_job.destination, job.source)
+                    distances.add((last_job.destination, job.source), dist_lastend_start)    
+                    sum_distance += dist_lastend_start
                 first = False
+
             last_job = job
         dist = sum_distance
-        dist += distances[new_job.source_id, new_job.destination_id]
+        try:
+            dist += distances[(new_job.source_id, new_job.destination_id)]
+        except KeyError:
+            dist_newstart_end = navigator.calc_distance(new_job.source_id, new_job.destination_id)
+            distances.add((new_job.source_id, new_job.destination_id), dist_newstart_end)
+            dist *= dist_newstart_end
         return dist * speed

@@ -4,8 +4,8 @@
 
 class Job(object):
 
-    def __init__(self, id, cost, source, source_id,
-                 destination, destination_id, type):
+    def __init__(self, id, cost, source,
+                 destination, type):
         self.id = id
         self.cost = cost
         self.source = source

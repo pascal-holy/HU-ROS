@@ -2,13 +2,13 @@
 import rospy
 import random
 from pro_ant.msg import JobOffer
-
+from geometry_msgs.msg import Point
 
 def create_message(new_id):
     msg = JobOffer()
     msg.id = new_id
-    msg.source_id = random.randint(0, 2)
-    msg.destination_id = random.randint(0, 2)
+    msg.source_id = Point(1.0234, 1, 0)
+    msg.destination_id = Point(-1, -1, 0)
     while msg.source_id == msg.destination_id:
         msg.destination_id = random.randint(0, 2)
     return msg
