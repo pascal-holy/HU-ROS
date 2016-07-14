@@ -2,7 +2,7 @@
   <param name="/use_sim_time" value="true"/>
   <arg name="map_file" default="$(env TURTLEBOT_GAZEBO_MAP_FILE)"/>
   <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find pro_ant)/map.yaml" >
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" >
     <param name="frame_id" value="/map"/>
   </node>
 
