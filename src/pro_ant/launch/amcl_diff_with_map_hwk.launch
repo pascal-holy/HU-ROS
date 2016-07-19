@@ -38,6 +38,7 @@
   <param name="update_min_d" value="0.2"/>
   <param name="update_min_a" value="0.5"/>
   <param name="odom_frame_id" value=" $(arg robot_name)_tf/odom"/>
+  <param name="base_frame_id" value="$(arg robot_name)_tf/base_link"/> 
   <param name="resample_interval" value="1"/>
   <param name="transform_tolerance" value="0.1"/>
   <param name="recovery_alpha_slow" value="0.0"/>
@@ -46,6 +47,7 @@
   <remap from="static_map" to="/static_map" />
   <remap from="map" to="/map" />
   <remap from="scan" to="base_scan"/>
+
 
 </node>
 
