@@ -6,9 +6,11 @@
   </include>-->
   <param name="/use_sim_time" value="true" />
   <arg name="robot_name"/>
-  <include file="$(find pro_ant)/launch/amcl_diff_with_map_hwk.launch" />
+  <include file="$(find pro_ant)/launch/amcl_diff_with_map_hwk.launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+  </include>
    <node pkg="tf" type="static_transform_publisher" name="map_to_odom_combined" args="0 0 0 0 0 0 /map $(arg robot_name)_tf/odom 100"/>
-  <!-- <node pkg="tf" type="static_transform_publisher" name="map_to_camera_depth" args="0 0 0 0 0 0 /map $(arg robot_name)_tf/camera_depth_frame 100"/>-->
+  <!--<node pkg="tf" type="static_transform_publisher" name="map_to_camera_depth" args="0 0 0 0 0 0 /map $(arg robot_name)_tf/camera_depth_frame 100"/>-->
 
   <!-- Define your move_base node
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
