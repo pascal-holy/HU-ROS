@@ -29,7 +29,7 @@ class GoToPose():
 	rospy.on_shutdown(self.shutdown)
 	
 	# Tell the action client that we want to spin a thread by default
-	self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+	self.move_base = actionlib.SimpleActionClient("robot1/move_base", MoveBaseAction)
 	rospy.loginfo("Wait for the action server to come up")
 
 	# Allow up to 5 seconds for the action server to come up
