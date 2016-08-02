@@ -4,12 +4,14 @@ from pro_ant.msg import JobOffer, Bid, Shotgun
 from classes.bidding import BidLog, CostCalculator
 from classes.job import Job
 from classes.movement import MoveController
+from collections import deque
 import numpy as np
 import heapq
 
 
 class Robot():
     def __init__(self):
+        rospy.init_node("turtle", anonymous=True)
         if rospy.has_param('~robot_id'):
             print "autoinit"
         else:
@@ -19,6 +21,7 @@ class Robot():
                      rospy.get_param('~base_y'),
                      0.0)
         self.charge = 200.0
+        self.busy = False
         self.avg_speed = 1.0
         self.max_load = 1000
         self.job_started = '00'
@@ -32,6 +35,7 @@ class Robot():
         self.stations.append((2.0, -0.5, 0))
         self.distances = np.matrix([[0, 2, 3], [2, 0, 3], [3, 2, 0]])
         self.navigator = MoveController()
+        self.cc = CostCalculator()
         # short sleep
         rospy.sleep(rospy.get_param('~sleep'))
         # init done
@@ -55,11 +59,10 @@ class Robot():
             self.bl.note_bid(data.job_id, data.value)
 
     def got_job_offer(self, data):
-        cc = CostCalculator()
         job = Job(data.id, 0.0,
                   self.stations[data.source_id], data.source_id,
                   self.stations[data.destination_id], data.destination_id, 1)
-        my_bid = cc.calculate(job, self.base, self.charge, self.jobs,
+        my_bid = self.cc.calculate(job, self.base, self.charge, self.jobs,
                               self.distances, self.avg_speed)
         if my_bid < self.bl.best_bid(job.id):
             self.bl.note_bid(job.id, my_bid)
@@ -71,7 +74,7 @@ class Robot():
             pub.publish(bid_msg)
             rospy.loginfo(bid_msg)
         if my_bid == self.bl.best_bid(job.id):
-            if self.leading == 5:
+            if self.leading == 2:
                 self.leading = 0  # theoretisch pro Auftrag
                 print "I got the job"
                 seller = rospy.Publisher('Shotgun', Shotgun, queue_size=10)
@@ -80,17 +83,25 @@ class Robot():
                 shotgun.job_id = job.id
                 seller.publish(shotgun)
                 self.jobs.append(job)
-                position = {'x': job.source[0], 'y': job.source[1]}
-                quaternion = {'r1': 0.000, 'r2': 0.000,
-                              'r3': 0.000, 'r4': 1.000}
-                rospy.loginfo("Go to (%s, %s) pose",
-                              position['x'], position['y'])
+                self.do_job()
                 # success = self.navigator.goto(position, quaternion)
             self.leading += 1
 
+    def do_job(self):
+        if self.jobs:
+            current_job = self.jobs.pop(0)
+            position = {'x': current_job.source[0],
+                        'y': current_job.source[1]}
+            quaternion = {'r1': 0.000, 'r2': 0.000,
+                          'r3': 0.000, 'r4': 1.000}
+            rospy.loginfo("Go to (%s, %s) pose",
+                          position['x'], position['y'])
+            success = self.navigator.goto(position, quaternion)
+            if success:
+                print "success"
+
 
 if __name__ == '__main__':
-    rospy.init_node("turtle", anonymous=True)
     try:
         turt = Robot()
     except rospy.ROSInterruptException:

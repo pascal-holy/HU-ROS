@@ -13,7 +13,7 @@ import math
 class MoveController():
     def __init__(self):
         self.goal_sent = False
-        rospy.init_node("MC", anonymous=True)
+        # rospy.init_node("MC", anonymous=True)
         # What to do if shut down (e.g. Ctrl-C or failure)
         rospy.on_shutdown(self.shutdown)
 
