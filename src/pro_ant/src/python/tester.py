@@ -24,9 +24,9 @@ bl.note_bid(1, 400.0)
 # bl.print_()
 
 # print distMatrix[0, 0]
-print(cc.calculate(job1, (0, 0, 0), 100, jobQueue, distMatrix, 1.0))
-# print(bl.highest_bid(job1))
-# print(bl.highest_bid(job2))
+# print(cc.calculate(job1, (0, 0, 0), 100, jobQueue, distMatrix, 1.0))
+print(bl.best_bid(1))
+print(bl.best_bid(2))
 
 
 jobList = list()
@@ -34,26 +34,26 @@ jobList = list()
 # jobList.append(job2)
 
 
-for job in jobList:
-    my_bid = cc.calculate(job, (0, 0, 0), 500, jobQueue, distMatrix, 1.0)
-    print my_bid
-    if my_bid > bl.highest_bid(job.id):
-        print "I'm highest bidder for job %i!" % job.id
+# for job in jobList:
+#     my_bid = cc.calculate(job, (0, 0, 0), 500, jobQueue, distMatrix, 1.0)
+#     print my_bid
+#     if my_bid > bl.highest_bid(job.id):
+#         print "I'm highest bidder for job %i!" % job.id
 
-heap = []
-heapq.heappush(heap, 2)
-heapq.heappush(heap, 4)
-# print heapq.heappushpop(heap, 3)
+# heap = []
+# heapq.heappush(heap, 2)
+# heapq.heappush(heap, 4)
+# # print heapq.heappushpop(heap, 3)
 
-navigator = MoveController()
+# navigator = MoveController()
 
-p1 = Point(float(-3), float(1), 0.0)
-p2 = Point(float(-3), float(-2), 0.0)
-print 'distance %f' % navigator.calc_distance(p1, p2)
-p1 = Point(float(1), float(1), 0.0)
-p2 = Point(float(0), float(0), 0.0)
-start = time.time()
-print 'distance %f' % navigator.calc_distance(p1, p2)
-end = time.time()
-delta = end - start
-print delta
+# p1 = Point(float(-3), float(1), 0.0)
+# p2 = Point(float(-3), float(-2), 0.0)
+# print 'distance %f' % navigator.calc_distance(p1, p2)
+# p1 = Point(float(1), float(1), 0.0)
+# p2 = Point(float(0), float(0), 0.0)
+# start = time.time()
+# print 'distance %f' % navigator.calc_distance(p1, p2)
+# end = time.time()
+# delta = end - start
+# print delta

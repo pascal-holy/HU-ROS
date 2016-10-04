@@ -13,7 +13,7 @@ import math
 class MoveController():
     def __init__(self):
         self.goal_sent = False
-        rospy.init_node("MC", anonymous=True)
+        # rospy.init_node("MC", anonymous=True)
         # What to do if shut down (e.g. Ctrl-C or failure)
         rospy.on_shutdown(self.shutdown)
 
@@ -23,7 +23,7 @@ class MoveController():
         rospy.loginfo("Wait for the action server to come up")
 
         # Allow up to 5 seconds for the action server to come up
-        # self.move_base.wait_for_server()
+        # self.move_base.wait_for_server(5)
         rospy.loginfo("action server up")
 
     def goto(self, pos, quat):

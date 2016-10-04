@@ -18,8 +18,8 @@ class Robot():
         self.base = (rospy.get_param('~base_x'),
                      rospy.get_param('~base_y'),
                      0.0)
-        self.charge = 200.0
-        self.avg_speed = 1.0
+        self.charge = rospy.get_param('~charge')
+        self.avg_speed = rospy.get_param('~speed')
         self.max_load = 1000
         self.job_started = '00'
         self.leading = 0
@@ -44,10 +44,12 @@ class Robot():
         rospy.spin()
 
     def auto_init(self):
-        rospy.set_param('~robot_id', 1)
-        rospy.set_param('~base_x', 0.0)
+        rospy.set_param('~robot_id', 2)
+        rospy.set_param('~base_x', 2.0)
         rospy.set_param('~base_y', 0.0)
         rospy.set_param('~sleep', 1.0)
+        rospy.set_param('~speed', 1.0)
+        rospy.set_param('~charge', 10000.0)
 
     def gotBid(self, data):
         if data.bidder_id is not self.id:
@@ -87,6 +89,7 @@ class Robot():
                               position['x'], position['y'])
                 # success = self.navigator.goto(position, quaternion)
             self.leading += 1
+            print "leading"
 
 
 if __name__ == '__main__':
