@@ -31,7 +31,7 @@ class Robot():
         self.stations.append((-0.5, 0.0, 0))
         self.stations.append((2.0, -0.5, 0))
         self.distances = np.matrix([[0, 2, 3], [2, 0, 3], [3, 2, 0]])
-        self.navigator = MoveController()
+        self.move_controller = MoveController()
         # short sleep
         rospy.sleep(rospy.get_param('~sleep'))
         # init done
@@ -87,7 +87,7 @@ class Robot():
                               'r3': 0.000, 'r4': 1.000}
                 rospy.loginfo("Go to (%s, %s) pose",
                               position['x'], position['y'])
-                # success = self.navigator.goto(position, quaternion)
+                # success = self.move_controller.goto(position, quaternion)
             self.leading += 1
             print "leading"
 

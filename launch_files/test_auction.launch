@@ -9,9 +9,11 @@
   	type="robot.py"
   	name="robot1">
   		<param name="robot_id" value="1" />
- 		<param name="sleep" value="3" type="int"/>
+ 		<param name="sleep" value="1" type="int"/>
  		<param name="base_x" value="2.0" />
  		<param name="base_y" value="2.0" />
+    <param name="speed" value="1.1"/>
+    <param name="charge" value="10000.0"/>
  	</node>
   <node
     pkg="pro_ant"
@@ -20,6 +22,30 @@
       <param name="robot_id" value="2" />
     <param name="sleep" value="2" type="int"/>
     <param name="base_x" value="-1.0" />
+    <param name="base_y" value="0.0" />
+    <param name="speed" value="2.2"/>
+    <param name="charge" value="5000.0"/>
+  </node>
+  <node
+    pkg="pro_ant"
+    type="robot.py"
+    name="robot3">
+      <param name="robot_id" value="3" />
+    <param name="sleep" value="3" type="int"/>
+    <param name="base_x" value="-1.0" />
     <param name="base_y" value="-1.0" />
+    <param name="speed" value="3.3"/>
+    <param name="charge" value="1000.0"/>
+  </node>
+  <node
+    pkg="pro_ant"
+    type="robot.py"
+    name="robot4">
+      <param name="robot_id" value="4" />
+    <param name="sleep" value="4" type="int"/>
+    <param name="base_x" value="1.0" />
+    <param name="base_y" value="-2.0" />
+    <param name="speed" value="4.4"/>
+    <param name="charge" value="10000.0"/>
   </node>
  </launch>
