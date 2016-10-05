@@ -1,0 +1,12 @@
+setterm -term linux -back white -fore black -clear
+stdbuf -oL python auctioneer.py |
+        while IFS= read -r line
+        do
+                echo "$line" | grep 'I got the job' &> /dev/null
+                if [ $? == 0 ]; then
+                        setterm -term linux -back green -fore black -clear
+                        sleep 0.3
+                        setterm -term linux -back white -fore black -clear
+                fi
+                echo "$line"
+        done
