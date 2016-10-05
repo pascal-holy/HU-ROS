@@ -1,0 +1,14 @@
+<launch>
+  <node
+  	pkg="pro_ant"
+  	type="robot.py"
+  	name="robot1"
+    output="screen">
+  		<param name="robot_id" value="1" />
+ 		<param name="sleep" value="1" type="int"/>
+ 		<param name="base_x" value="2.0" />
+ 		<param name="base_y" value="2.0" />
+    <param name="speed" value="1.1"/>
+    <param name="charge" value="10000.0"/>
+ 	</node>
+ </launch>
